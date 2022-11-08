@@ -1,3 +1,5 @@
+import {IsInt, IsNumber, IsString} from 'class-validator';
+
 export class CreateUserDto {
     firstName: string;
     lastName: string;
@@ -12,6 +14,6 @@ export class UpdateUserDto {
 }
 
 export class GetUsersDto {
-    skip: number;
-    take: number;
+    skip: number = 0;
+    take: number = 25;
 }

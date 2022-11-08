@@ -5,7 +5,7 @@ import {
     Get,
     Param,
     Post,
-    ParseIntPipe, Put, Query,
+    ParseIntPipe, Put, Query, ValidationPipe, UsePipes,
 } from '@nestjs/common';
 import {UpdateUserDto, CreateUserDto, GetUsersDto} from './dto/user.dto';
 import {User} from './user.entity';
@@ -31,6 +31,7 @@ export class UsersController {
     }
 
     @Get()
+    @UsePipes(new ValidationPipe({transform: true}))
     findAll(@Query() getUsersDto: GetUsersDto): Promise<{ users: User[]; count: number; }> {
         return this.usersService.findAll(getUsersDto);
     }

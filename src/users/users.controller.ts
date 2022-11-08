@@ -5,10 +5,9 @@ import {
     Get,
     Param,
     Post,
-    ParseIntPipe, Put,
+    ParseIntPipe, Put, Query,
 } from '@nestjs/common';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
+import {UpdateUserDto, CreateUserDto, GetUsersDto} from './dto/user.dto';
 import {User} from './user.entity';
 import {UsersService} from './users.service';
 
@@ -28,8 +27,8 @@ export class UsersController {
     }
 
     @Get()
-    findAll(): Promise<User[]> {
-        return this.usersService.findAll();
+    findAll(@Query() getUsersDto: GetUsersDto): Promise<{ users: User[]; count: number; }> {
+        return this.usersService.findAll(getUsersDto);
     }
 
     @Get(':id')
@@ -38,7 +37,7 @@ export class UsersController {
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<void> {
+    remove(@Param('id') id: number): Promise<void> {
         return this.usersService.remove(id);
     }
 }

@@ -1,11 +1,10 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {DeepPartial, Repository} from 'typeorm';
-import {CreateUserDto} from './dto/create-user.dto';
+import {Repository} from 'typeorm';
 import {User} from './user.entity';
 import {Token} from '../token/token.entity';
 import * as bcrypt from 'bcrypt';
-import {UpdateUserDto} from "./dto/update-user.dto";
+import {UpdateUserDto, CreateUserDto, GetUsersDto} from "./dto/user.dto";
 
 @Injectable()
 export class UsersService {
@@ -39,15 +38,22 @@ export class UsersService {
         return this.usersRepository.save(user)
     }
 
-    async findAll(): Promise<User[]> {
-        return this.usersRepository.find();
+    async findAll(data: GetUsersDto): Promise<{ users: User[]; count: number; }> {
+        let [result, total] = await this.usersRepository.findAndCount({
+            take: data.take,
+            skip: data.skip,
+        });
+        return {
+            users: result,
+            count: total
+        }
     }
 
     findOne(id: number): Promise<User> {
         return this.usersRepository.findOneBy({id: id});
     }
 
-    async remove(id: string): Promise<void> {
+    async remove(id: number): Promise<void> {
         await this.usersRepository.delete(id);
     }
 

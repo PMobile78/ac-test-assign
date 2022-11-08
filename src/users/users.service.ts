@@ -25,7 +25,14 @@ export class UsersService {
         user.lastName = createUserDto.lastName;
         user.password_hash = hash;
         user.email = createUserDto.email;
-        return this.usersRepository.save(user);
+        try {
+            return await this.usersRepository.save(user);
+        } catch (error) {
+            if(error.code === 'ER_DUP_ENTRY') {
+                throw new HttpException('Duplicate email.', HttpStatus.BAD_REQUEST);
+            }
+            throw new HttpException('Something wrong.', HttpStatus.BAD_REQUEST);
+        }
     }
 
     async update(updateUserDto: UpdateUserDto): Promise<User> {

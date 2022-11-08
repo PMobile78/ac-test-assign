@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {User} from './user.entity';
@@ -8,6 +8,8 @@ import {UpdateUserDto, CreateUserDto, GetUsersDto} from "./dto/user.dto";
 
 @Injectable()
 export class UsersService {
+    private readonly logger = new Logger(UsersService.name);
+
     constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
@@ -29,8 +31,10 @@ export class UsersService {
             return await this.usersRepository.save(user);
         } catch (error) {
             if(error.code === 'ER_DUP_ENTRY') {
+                this.logger.error('Duplicate email.', error)
                 throw new HttpException('Duplicate email.', HttpStatus.BAD_REQUEST);
             }
+            this.logger.error('Something wrong during creating a new user.', error)
             throw new HttpException('Something wrong.', HttpStatus.BAD_REQUEST);
         }
     }

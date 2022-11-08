@@ -10,6 +10,8 @@ const {v4: uuidv4} = require('uuid')
 
 @Injectable()
 export class TokenService {
+    private readonly logger = new Logger(TokenService.name);
+
     constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
@@ -17,8 +19,6 @@ export class TokenService {
         private readonly tokenRepository: Repository<Token>,
     ) {
     }
-
-    private readonly logger = new Logger(TokenService.name);
 
     async createToken(user: User): Promise<string> {
         const secret = process.env.TOKEN_SECRET;

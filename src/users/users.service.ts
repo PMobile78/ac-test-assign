@@ -1,6 +1,6 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {DeepPartial, Repository} from 'typeorm';
 import {CreateUserDto} from './dto/create-user.dto';
 import {User} from './user.entity';
 import {Token} from '../token/token.entity';
@@ -29,9 +29,15 @@ export class UsersService {
         return this.usersRepository.save(user);
     }
 
-    // async update(updateUserDto: UpdateUserDto): Promise<User> {
-    //
-    // }
+    async update(updateUserDto: UpdateUserDto): Promise<User> {
+        let user = await this.usersRepository.findOneBy({id: updateUserDto.id});
+        if (!user) {
+            throw new HttpException(`User ID ${updateUserDto.id} should exist before you can make any changes with it`, HttpStatus.NOT_FOUND);
+        }
+        user.firstName = updateUserDto.firstName
+        user.lastName = updateUserDto.lastName
+        return this.usersRepository.save(user)
+    }
 
     async findAll(): Promise<User[]> {
         return this.usersRepository.find();

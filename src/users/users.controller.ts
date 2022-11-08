@@ -12,7 +12,7 @@ import {UpdateUserDto} from './dto/update-user.dto';
 import {User} from './user.entity';
 import {UsersService} from './users.service';
 
-@Controller('users')
+@Controller('entities')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {
     }
@@ -22,10 +22,10 @@ export class UsersController {
         return this.usersService.create(createUserDto);
     }
 
-    // @Put()
-    // update(@Body() updateUserDto: UpdateeUserDto): Promise<User> {
-    //     return this.usersService.create(updateUserDto);
-    // }
+    @Put()
+    update(@Body() updateUserDto: UpdateUserDto): Promise<User> {
+        return this.usersService.update(updateUserDto);
+    }
 
     @Get()
     findAll(): Promise<User[]> {

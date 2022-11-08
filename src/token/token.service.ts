@@ -40,7 +40,7 @@ export class TokenService {
         let user = await this.usersRepository.findOneBy({email: email});
         let isMatched = await bcrypt.compare(password, user.password_hash);
         if (!isMatched) {
-            throw Error('Wrong Login or Password.');
+            throw new HttpException('Wrong Login or Password.', HttpStatus.UNAUTHORIZED);
         }
         return user;
     }

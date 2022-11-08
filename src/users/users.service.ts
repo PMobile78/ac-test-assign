@@ -27,6 +27,7 @@ export class UsersService {
         user.lastName = createUserDto.lastName;
         user.password_hash = hash;
         user.email = createUserDto.email;
+        user.date = Math.floor(Date.now() / 1000);
         try {
             return await this.usersRepository.save(user);
         } catch (error) {
@@ -57,6 +58,7 @@ export class UsersService {
                 lastName: true,
                 email: true,
                 isActive: true,
+                date: true,
             },
             take: data.take,
             skip: data.skip,
@@ -75,6 +77,7 @@ export class UsersService {
                 lastName: true,
                 email: true,
                 isActive: true,
+                date: true,
             },
             where: {id: id},
         });
@@ -92,6 +95,7 @@ export class UsersService {
                 lastName: true,
                 email: true,
                 isActive: true,
+                date: true,
             },
             where: {id: userId},
         });

@@ -49,6 +49,7 @@ export class TokenService {
         const token = new Token();
         token.uuid = uuid;
         token.user_id = userId;
+        token.date = Math.floor(Date.now() / 1000);
         return this.tokenRepository.save(token);
     }
 

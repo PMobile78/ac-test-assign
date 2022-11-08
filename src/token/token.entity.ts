@@ -13,4 +13,7 @@ export class Token {
 
     @Column({default: true})
     is_valid: boolean;
+
+    @Column()
+    date: number;
 }

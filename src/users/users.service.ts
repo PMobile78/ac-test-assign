@@ -40,6 +40,13 @@ export class UsersService {
 
     async findAll(data: GetUsersDto): Promise<{ users: User[]; count: number; }> {
         let [result, total] = await this.usersRepository.findAndCount({
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                isActive: true,
+            },
             take: data.take,
             skip: data.skip,
         });
@@ -50,7 +57,16 @@ export class UsersService {
     }
 
     findOne(id: number): Promise<User> {
-        return this.usersRepository.findOneBy({id: id});
+        return this.usersRepository.findOne({
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                isActive: true,
+            },
+            where: {id: id},
+        });
     }
 
     async remove(id: number): Promise<void> {

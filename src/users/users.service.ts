@@ -74,6 +74,16 @@ export class UsersService {
     }
 
     async findUserByToken(userId: number): Promise<User> {
-        return this.usersRepository.findOneBy({id: userId});
+        // return this.usersRepository.findOneBy({id: userId});
+        return this.usersRepository.findOne({
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                isActive: true,
+            },
+            where: {id: userId},
+        });
     }
 }

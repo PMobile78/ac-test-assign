@@ -17,13 +17,17 @@ export class UsersController {
     }
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto): Promise<User> {
-        return this.usersService.create(createUserDto);
+    async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+        let user = await this.usersService.create(createUserDto);
+        delete user.password_hash;
+        return user;
     }
 
     @Put()
-    update(@Body() updateUserDto: UpdateUserDto): Promise<User> {
-        return this.usersService.update(updateUserDto);
+    async update(@Body() updateUserDto: UpdateUserDto): Promise<User> {
+        let user = await this.usersService.update(updateUserDto);
+        delete user.password_hash;
+        return user;
     }
 
     @Get()
